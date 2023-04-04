@@ -40,6 +40,7 @@ export const Chat = (props) => {
     }
 
     return <>
+    <Box textAlign={'center'}><Text>Welcome to : {room.toUpperCase()}</Text></Box>
         <Box
             justifyContent={'center'}
             border={'1px'}
@@ -47,7 +48,7 @@ export const Chat = (props) => {
             as={'form'}
             onSubmit={handleSubmit}>
             {messages.map((message) => <Stack><Box>
-                <Text>{message.text}</Text>
+                <Text>{message.user}: {message.text} </Text>
             </Box></Stack>)}
             <Input className="newMessageInput"
                 placeholder="Type your message here..."
