@@ -1,6 +1,8 @@
 import { useEffect, useState, } from "react";
 import { addDoc, collection, onSnapshot, query, serverTimestamp, where } from "firebase/firestore"
 import { auth, db } from "../firebase-config";
+import { Box, Input, Button, Stack, Text } from "@chakra-ui/react";
+
 
 export const Chat = (props) => {
     const { room } = props
@@ -11,14 +13,15 @@ export const Chat = (props) => {
 
     useEffect(() => {
         const queryMessage = query(messageRef, where("room", "==", room));
-        onSnapshot(queryMessage, (snapshot) => {
+        const unsubscribe = onSnapshot(queryMessage, (snapshot) => {
             let message = [];
             snapshot.forEach((doc) => {
                 message.push({ ...doc.data(), id: doc.id });
             })
-            setMessages(setNewMessage);
+            setMessages(message);
 
-        })
+        });
+        return () => unsubscribe();
     }, [])
 
     const handleSubmit = (e) => {
@@ -36,13 +39,21 @@ export const Chat = (props) => {
         console.log(newMessage);
     }
 
-    return <div className="chat-app">
-        <form onSubmit={handleSubmit} className="newMessageForm">
-            <input className="newMessageInput"
+    return <>
+        <Box
+            justifyContent={'center'}
+            border={'1px'}
+            p={'3%'}
+            as={'form'}
+            onSubmit={handleSubmit}>
+            {messages.map((message) => <Stack><Box>
+                <Text>{message.text}</Text>
+            </Box></Stack>)}
+            <Input className="newMessageInput"
                 placeholder="Type your message here..."
                 onChange={(e) => setNewMessage(e.target.value)}
                 value={newMessage} />
-            <button type="submit" className="submit-button">Send</button>
-        </form>
-    </div>
+            <Button type="submit" className="submit-button">Send</Button>
+        </Box>
+    </>
 }

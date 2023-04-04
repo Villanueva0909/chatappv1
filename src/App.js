@@ -4,6 +4,7 @@ import './App.css';
 import { Auth } from "./Components/Auth"
 import Cookies from 'universal-cookie/cjs/Cookies';
 import { Chat } from './Components/Chat';
+import { Stack, Input, Button } from '@chakra-ui/react';
 
 const cookies = new Cookies();
 
@@ -23,13 +24,13 @@ function App() {
   }
 
   return (
-    <div> {room
-     ? <Chat room={room}/> : <div className='room'>
+    <> {room ? <Chat room={room}/> : 
+    <Stack>
       <label>Enter Room Name:</label>
-      <input ref={roomInputRef} />
-      <button onClick={() => setRoom(roomInputRef.current.value)}>Enter Chat</button>
-    </div>}
-    </div>
+      <Input ref={roomInputRef} />
+      <Button onClick={() => setRoom(roomInputRef.current.value)}>Enter Chat</Button>
+    </Stack>}
+    </>
   )
 };
 
